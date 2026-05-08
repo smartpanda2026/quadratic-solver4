@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quadratic Equation Solver & Grapher - Free Online Tool</title>
+    <meta name="description" content="Free online quadratic equation solver with interactive graph. Solve ax² + bx + c = 0, visualize parabolas, and find roots instantly.">
+    <meta name="keywords" content="quadratic equation solver, quadratic grapher, parabola calculator, math tool">
+    
+    <!-- Open Graph for social sharing -->
+    <meta property="og:title" content="Quadratic Equation Solver & Grapher">
+    <meta property="og:description" content="Solve and visualize quadratic equations online for free">
+    <meta property="og:type" content="website">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .main-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        @media (max-width: 968px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 1.8em;
+            }
+        }
+
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .input-group {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        @media (max-width: 480px) {
+            .input-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .input-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-field label {
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+            font-size: 0.9em;
+        }
+
+        .input-field input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .input-field input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .btn-solve {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            flex: 2;
+        }
+
+        .btn-clear {
+            background: #f5f5f5;
+            color: #666;
+            flex: 1;
+        }
+
+        .presets {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .preset-btn {
+            padding: 8px 15px;
+            background: #e3f2fd;
+            color: #1976d2;
+            font-size: 13px;
+            flex: 0 0 auto;
+            letter-spacing: 0;
+        }
+
+        .preset-btn:hover {
+            background: #bbdefb;
+        }
+
+        .result-box {
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-box.real {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            display: block;
+        }
+
+        .result-box.complex {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            display: block;
+        }
+
+        .result-box.special {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            display: block;
+        }
+
+        .nature {
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        .discriminant {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .solutions {
+            display: grid;
+            gap: 10px;
+        }
+
+        .solution {
+            background: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #333;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .vertex-info {
+            text-align: center;
+            margin-top: 10px;
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .graph-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        canvas {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            background: white;
+        }
+
+        .graph-title {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .legend-color {
+            width: 25px;
+            height: 3px;
+            border-radius: 2px;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .error-box {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 20px;
+            opacity: 0.8;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: underline;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .share-btn {
+            background: white;
+            color: #333;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .copy-url-btn {
+            background: #4caf50;
+            color: white;
+            padding: 8px 15px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📐 Quadratic Equation Solver & Grapher</h1>
+        <p>Solve and visualize any quadratic equation - Free Online Tool</p>
+    </div>
+
+    <div class="container">
+        <div class="main-card">
+            <div class="content">
+                <!-- Left Column: Input and Results -->
+                <div class="input-section">
+                    <div class="section-title">Enter Your Equation</div>
+                    
+                    <div class="info-box">
+                        💡 Enter the coefficients of your quadratic equation in the form <strong>ax² + bx + c = 0</strong>
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-field">
+                            <label for="a">a (x² coefficient)</label>
+                            <input type="number" id="a" step="any" value="1" placeholder="Enter a">
+                        </div>
+                        <div class="input-field">
+                            <label for="b">b (x coefficient)</label>
+                            <input type="number" id="b" step="any" value="-5" placeholder="Enter b">
+                        </div>
+                        <div class="input-field">
+                            <label for="c">c (constant)</label>
+                            <input type="number" id="c" step="any" value="6" placeholder="Enter c">
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-solve" onclick="solveAndGraph()">🔍 Solve & Graph</button>
+                        <button class="btn-clear" onclick="clearAll()">🗑️ Clear</button>
+                    </div>
+
+                    <div class="presets">
+                        <span style="color: #666; font-size: 0.9em; padding: 8px 0;">Try:</span>
+                        <button class="preset-btn" onclick="loadPreset(1, -5, 6)">Two Roots</button>
+                        <button class="preset-btn" onclick="loadPreset(1, -4, 4)">Double Root</button>
+                        <button class="preset-btn" onclick="loadPreset(1, 2, 5)">Complex</button>
+                        <button class="preset-btn" onclick="loadPreset(1, 0, -4)">x²=4</button>
+                        <button class="preset-btn" onclick="loadPreset(2, -7, 3)">2x²-7x+3</button>
+                    </div>
+
+                    <div id="errorBox" class="error-box"></div>
+                    <div id="resultBox" class="result-box"></div>
+
+                    <div class="share-buttons">
+                        <button class="copy-url-btn" onclick="copyURL()">📋 Copy Link</button>
+                        <a href="#" class="share-btn" onclick="shareTwitter()" target="_blank">🐦 Tweet</a>
+                    </div>
+                </div>
+
+                <!-- Right Column: Graph -->
+                <div class="graph-section">
+                    <div class="section-title" style="width: 100%;">Interactive Graph</div>
+                    <canvas id="graphCanvas" width="500" height="500"></canvas>
+                    <div class="legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #667eea;"></div>
+                            <span>Parabola f(x)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #f44336;"></div>
+                            <span>X-axis</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background: #4caf50;"></div>
+                            <span>Roots (Solutions)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot" style="background: #ff9800;"></div>
+                            <span>Vertex</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Free online quadratic equation solver - No registration required | 
+           <a href="#" onclick="shareFacebook()">Share on Facebook</a></p>
+    </div>
+
+    <script>
+        // Global state
+        let currentParams = { a: 1, b: -5, c: 6 };
+
+        // Initialize on load
+        window.onload = function() {
+            // Check URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const a = parseFloat(urlParams.get('a'));
+            const b = parseFloat(urlParams.get('b'));
+            const c = parseFloat(urlParams.get('c'));
+            
+            if (!isNaN(a) && !isNaN(b) && !isNaN(c)) {
+                document.getElementById('a').value = a;
+                document.getElementById('b').value = b;
+                document.getElementById('c').value = c;
+            }
+            
+            solveAndGraph();
+        };
+
+        function loadPreset(a, b, c) {
+            document.getElementById('a').value = a;
+            document.getElementById('b').value = b;
+            document.getElementById('c').value = c;
+            solveAndGraph();
+        }
+
+        function solveAndGraph() {
+            const resultBox = document.getElementById('resultBox');
+            const errorBox = document.getElementById('errorBox');
+            
+            resultBox.className = 'result-box';
+            resultBox.innerHTML = '';
+            errorBox.style.display = 'none';
+
+            const a = parseFloat(document.getElementById('a').value);
+            const b = parseFloat(document.getElementById('b').value);
+            const c = parseFloat(document.getElementById('c').value);
+
+            if (isNaN(a) || isNaN(b) || isNaN(c)) {
+                showError('Please enter valid numbers for all coefficients');
+                return;
+            }
+
+            currentParams = { a, b, c };
+            updateURL(a, b, c);
+
+            const result = solveQuadratic(a, b, c);
+            displayResult(result);
+            drawGraph(a, b, c, result);
+        }
+
+        function solveQuadratic(a, b, c) {
+            if (a === 0) {
+                if (b === 0) {
+                    return {
+                        type: 'special',
+                        message: c === 0 ? 'Infinite solutions (all real numbers)' : 'No solution exists',
+                        discriminant: null,
+                        solutions: null
+                    };
+                } else {
+                    const x = -c / b;
+                    return {
+                        type: 'special',
+                        nature: 'Linear Equation (a = 0)',
+                        discriminant: null,
+                        solutions: [{ value: x, label: 'x' }],
+                        isLinear: true
+                    };
+                }
+            }
+
+            const discriminant = b * b - 4 * a * c;
+            const vertex = {
+                x: -b / (2 * a),
+                y: -discriminant / (4 * a)
+            };
+
+            if (discriminant > 0) {
+                const sqrtD = Math.sqrt(discriminant);
+                const x1 = (-b + sqrtD) / (2 * a);
+                const x2 = (-b - sqrtD) / (2 * a);
+                return {
+                    type: 'real',
+                    nature: 'Two Distinct Real Roots ✨',
+                    discriminant: discriminant,
+                    solutions: [
+                        { value: Math.max(x1, x2), label: 'x₁' },
+                        { value: Math.min(x1, x2), label: 'x₂' }
+                    ],
+                    vertex: vertex
+                };
+            } else if (discriminant === 0) {
+                const x = -b / (2 * a);
+                return {
+                    type: 'real',
+                    nature: 'One Real Root (Double Root) 🎯',
+                    discriminant: 0,
+                    solutions: [{ value: x, label: 'x' }],
+                    vertex: vertex
+                };
+            } else {
+                const realPart = -b / (2 * a);
+                const imagPart = Math.sqrt(-discriminant) / (2 * a);
+                return {
+                    type: 'complex',
+                    nature: 'Two Complex Conjugate Roots 🔮',
+                    discriminant: discriminant,
+                    solutions: [
+                        { value: `${realPart.toFixed(4)} + ${imagPart.toFixed(4)}i`, label: 'x₁' },
+                        { value: `${realPart.toFixed(4)} - ${imagPart.toFixed(4)}i`, label: 'x₂' }
+                    ],
+                    vertex: vertex,
+                    complexInfo: { real: realPart, imag: imagPart }
+                };
+            }
+        }
+
+        function displayResult(result) {
+            const resultBox = document.getElementById('resultBox');
+            let html = '';
+
+            if (result.nature) {
+                html += `<div class="nature">${result.nature}</div>`;
+            }
+
+            if (result.discriminant !== null && result.discriminant !== undefined) {
+                html += `<div class="discriminant">Discriminant Δ = ${result.discriminant.toFixed(4)}</div>`;
+            }
+
+            if (result.solutions) {
+                html += '<div class="solutions">';
+                result.solutions.forEach(sol => {
+                    html += `<div class="solution">${sol.label} = ${typeof sol.value === 'number' ? sol.value.toFixed(4) : sol.value}</div>`;
+                });
+                html += '</div>';
+            } else if (result.message) {
+                html += `<div class="solution">${result.message}</div>`;
+            }
+
+            if (result.vertex) {
+                html += `<div class="vertex-info">
+                    📍 Vertex: (${result.vertex.x.toFixed(4)}, ${result.vertex.y.toFixed(4)})
+                </div>`;
+            }
+
+            if (result.type === 'complex') {
+                html += `<div class="vertex-info" style="margin-top:10px;">
+                    ⚠️ The parabola does not intersect the X-axis
+                </div>`;
+            }
+
+            resultBox.className = `result-box ${result.type}`;
+            resultBox.innerHTML = html;
+        }
+
+        function drawGraph(a, b, c, result) {
+            const canvas = document.getElementById('graphCanvas');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, width, height);
+
+            const padding = 60;
+            const graphWidth = width - 2 * padding;
+            const graphHeight = height - 2 * padding;
+
+            // Determine x range
+            let xMin, xMax;
+            if (result.solutions && result.type === 'real' && result.solutions[0] && typeof result.solutions[0].value === 'number') {
+                const roots = result.solutions.map(s => s.value);
+                const minRoot = Math.min(...roots);
+                const maxRoot = Math.max(...roots);
+                const center = (minRoot + maxRoot) / 2;
+                const range = Math.max(Math.abs(maxRoot - minRoot) * 2, 8);
+                xMin = center - range / 2;
+                xMax = center + range / 2;
+            } else if (result.vertex) {
+                const range = 10;
+                xMin = result.vertex.x - range / 2;
+                xMax = result.vertex.x + range / 2;
+            } else {
+                xMin = -5;
+                xMax = 5;
+            }
+
+            if (xMax - xMin < 6) {
+                const center = (xMin + xMax) / 2;
+                xMin = center - 3;
+                xMax = center + 3;
+            }
+
+            const xStep = (xMax - xMin) / 200;
+            let yMin = Infinity, yMax = -Infinity;
+            for (let x = xMin; x <= xMax; x += xStep) {
+                const y = a * x * x + b * x + c;
+                yMin = Math.min(yMin, y);
+                yMax = Math.max(yMax, y);
+            }
+
+            const yRange = yMax - yMin;
+            yMin -= yRange * 0.15;
+            yMax += yRange * 0.15;
+
+            if (yMin > 0) yMin = -1;
+            if (yMax < 0) yMax = 1;
+
+            const scaleX = (x) => padding + ((x - xMin) / (xMax - xMin)) * graphWidth;
+            const scaleY = (y) => padding + ((yMax - y) / (yMax - yMin)) * graphHeight;
+
+            // Draw grid
+            ctx.strokeStyle = '#e8e8e8';
+            ctx.lineWidth = 0.5;
+            const xGridStep = Math.pow(10, Math.floor(Math.log10(xMax - xMin)));
+            for (let x = Math.floor(xMin / xGridStep) * xGridStep; x <= xMax; x += xGridStep) {
+                ctx.beginPath();
+                ctx.moveTo(scaleX(x), padding);
+                ctx.lineTo(scaleX(x), height - padding);
+                ctx.stroke();
+            }
+
+            const yGridStep = Math.pow(10, Math.floor(Math.log10(yMax - yMin)));
+            for (let y = Math.floor(yMin / yGridStep) * yGridStep; y <= yMax; y += yGridStep) {
+                ctx.beginPath();
+                ctx.moveTo(padding, scaleY(y));
+                ctx.lineTo(width - padding, scaleY(y));
+                ctx.stroke();
+            }
+
+            // Draw axes
+            ctx.strokeStyle = '#999';
+            ctx.lineWidth = 1.5;
+
+            if (yMin <= 0 && yMax >= 0) {
+                const yAxisPos = scaleY(0);
+                ctx.strokeStyle = '#f44336';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(padding, yAxisPos);
+                ctx.lineTo(width - padding, yAxisPos);
+                ctx.stroke();
+                ctx.fillStyle = '#f44336';
+                ctx.font = 'bold 12px Arial';
+                ctx.fillText('X-axis', width - padding - 50, yAxisPos - 10);
+            }
+
+            if (xMin <= 0 && xMax >= 0) {
+                ctx.strokeStyle = '#999';
+                ctx.lineWidth = 1.5;
+                const xAxisPos = scaleX(0);
+                ctx.beginPath();
+                ctx.moveTo(xAxisPos, padding);
+                ctx.lineTo(xAxisPos, height - padding);
+                ctx.stroke();
+            }
+
+            // Labels
+            ctx.fillStyle = '#666';
+            ctx.font = '11px Arial';
+            ctx.textAlign = 'center';
+            const yAxisPos = scaleY(0);
+            for (let x = Math.floor(xMin / xGridStep) * xGridStep; x <= xMax; x += xGridStep) {
+                if (Math.abs(x) < 0.001) continue;
+                ctx.fillText(Number.isInteger(x) ? x : x.toFixed(1), scaleX(x), yAxisPos + 15);
+            }
+
+            ctx.textAlign = 'right';
+            const xAxisPos = scaleX(0);
+            for (let y = Math.floor(yMin / yGridStep) * yGridStep; y <= yMax; y += yGridStep) {
+                if (Math.abs(y) < 0.001) continue;
+                ctx.fillText(Number.isInteger(y) ? y : y.toFixed(1), xAxisPos - 5, scaleY(y) + 4);
+            }
+
+            if (xAxisPos > padding && xAxisPos < width - padding && yAxisPos > padding && yAxisPos < height - padding) {
+                ctx.fillText('0', xAxisPos - 8, yAxisPos + 15);
+            }
+
+            // Draw parabola
+            ctx.strokeStyle = '#667eea';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            let firstPoint = true;
+            for (let x = xMin; x <= xMax; x += (xMax - xMin) / 500) {
+                const y = a * x * x + b * x + c;
+                const sx = scaleX(x);
+                const sy = scaleY(y);
+                if (sy < padding - 20 || sy > height - padding + 20) {
+                    firstPoint = true;
+                    continue;
+                }
+                if (firstPoint) {
+                    ctx.moveTo(sx, sy);
+                    firstPoint = false;
+                } else {
+                    ctx.lineTo(sx, sy);
+                }
+            }
+            ctx.stroke();
+
+            // Draw vertex
+            if (result.vertex) {
+                const vx = scaleX(result.vertex.x);
+                const vy = scaleY(result.vertex.y);
+                ctx.shadowColor = '#ff9800';
+                ctx.shadowBlur = 15;
+                ctx.fillStyle = '#ff9800';
+                ctx.beginPath();
+                ctx.arc(vx, vy, 8, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.fillStyle = '#333';
+                ctx.font = 'bold 11px Arial';
+                ctx.textAlign = 'left';
+                ctx.fillText(`(${result.vertex.x.toFixed(2)}, ${result.vertex.y.toFixed(2)})`, vx + 12, vy - 10);
+            }
+
+            // Draw roots
+            if (result.solutions && result.type === 'real') {
+                result.solutions.forEach(sol => {
+                    if (typeof sol.value === 'number') {
+                        const rx = scaleX(sol.value);
+                        const ry = scaleY(0);
+                        ctx.shadowColor = '#4caf50';
+                        ctx.shadowBlur = 20;
+                        ctx.fillStyle = '#4caf50';
+                        ctx.beginPath();
+                        ctx.arc(rx, ry, 7, 0, 2 * Math.PI);
+                        ctx.fill();
+                        ctx.shadowBlur = 0;
+                        ctx.strokeStyle = 'white';
+                        ctx.lineWidth = 2;
+                        ctx.stroke();
+                        ctx.fillStyle = '#333';
+                        ctx.font = 'bold 11px Arial';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(`(${sol.value.toFixed(2)}, 0)`, rx, ry - 15);
+                    }
+                });
+            }
+
+            if (result.type === 'complex' && result.complexInfo) {
+                const rx = scaleX(result.complexInfo.real);
+                const ry = scaleY(0);
+                ctx.fillStyle = '#2196f3';
+                ctx.font = 'italic 11px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('No real intersection', rx, ry - 15);
+            }
+        }
+
+        function updateURL(a, b, c) {
+            const url = new URL(window.location);
+            url.searchParams.set('a', a);
+            url.searchParams.set('b', b);
+            url.searchParams.set('c', c);
+            window.history.pushState({}, '', url);
+        }
+
+        function copyURL() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                alert('📋 Link copied to clipboard! Share it with others.');
+            }).catch(() => {
+                prompt('Copy this link:', url);
+            });
+        }
+
+        function shareTwitter() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent('Check out this free quadratic equation solver & grapher! 📐');
+            window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+        }
+
+        function shareFacebook() {
+            const url = encodeURIComponent(window.location.href);
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+        }
+
+        function showError(message) {
+            const errorBox = document.getElementById('errorBox');
+            errorBox.textContent = '⚠️ ' + message;
+            errorBox.style.display = 'block';
+            setTimeout(() => { errorBox.style.display = 'none'; }, 3000);
+        }
+
+        function clearAll() {
+            document.getElementById('a').value = '';
+            document.getElementById('b').value = '';
+            document.getElementById('c').value = '';
+            document.getElementById('resultBox').className = 'result-box';
+            document.getElementById('resultBox').innerHTML = '';
+            document.getElementById('errorBox').style.display = 'none';
+            const canvas = document.getElementById('graphCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            window.history.pushState({}, '', window.location.pathname);
+        }
+
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                solveAndGraph();
+            }
+        });
+    </script>
+</body>
+</html>
